@@ -1,0 +1,38 @@
+#!/bin/bash
+
+INPUT_FILE=$1
+OUTPUT_FILE=$2
+ADD_BIO=${3:-"false"}
+REPEAT=${4:-"true"}
+
+function substitute_slots {
+    slot=$1
+    while IFS= read -r text; do
+        if [ "$ADD_BIO" = "true" ]; then
+            short_slot=`echo $slot | sed 's/.*\.SLOT\.//g'`
+            sed -ie "0,/$slot/ s/$slot/{$short_slot:$text}/" $INPUT_FILE
+        else
+            sed -ie "0,/$slot/ s/$slot/$text/" $INPUT_FILE
+        fi
+    done < slots/$slot
+}
+
+sed -i 's/__ /__	/g' $INPUT_FILE
+
+for slot in `ls -1 slots/`; do
+    if grep --quiet "$slot" $INPUT_FILE; then
+        echo "expanding with phrases from $slot."
+        if [ "$REPEAT" = "true" ]; then
+            while grep --quiet "$slot" $INPUT_FILE; do
+                substitute_slots $slot
+            done
+        else
+            substitute_slots $slot
+        fi;
+    fi;
+done
+
+if [ "$ADD_BIO" = "true" ]; then
+    echo "Saving patterns expanded with slot values to: $OUTPUT_FILE"
+    paste <(cut -f1-4 $INPUT_FILE) <(cut -f5 $INPUT_FILE | ./convert_str_to_bio.py) > $OUTPUT_FILE
+fi

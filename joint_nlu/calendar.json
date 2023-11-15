@@ -1,0 +1,25 @@
+{
+    "model_id": "xlm-roberta-base",
+    "dataset_id": "custom.py",
+    "dataset_configs": ["all"],
+    "repository_id": "xlm_r-joint_nlu-custom_ds",
+    "trainer": {
+        "repository_id": "xlm_r-joint_nlu-custom_ds",
+        "evaluation_strategy": "epoch",
+        "learning_rate": 2e-5,
+        "per_device_train_batch_size": 16,
+        "per_device_eval_batch_size": 16,
+        "num_train_epochs": 20,
+        "weight_decay": 0.01,
+        "push_to_hub": true
+    },
+    "data_collator": {
+        "padding": true,
+        "max_length": 512
+    },
+    "split_ratio": {
+        "train": "100%",
+        "validation": "100%",
+        "test": "100%"
+    }
+}
