@@ -1,5 +1,5 @@
 {
-    "model_id": "xlm-roberta-base",
+    "model_name": "xlm-roberta-base",
     "dataset_id": "custom.py",
     "dataset_configs": ["all"],
     "repository_id": "xlm_r-joint_nlu-custom_ds",

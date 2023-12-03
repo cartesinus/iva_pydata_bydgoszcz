@@ -4,3 +4,4 @@ python-dateutil
 python-dotenv
 click
 JSGFToolsLeyzer
+GitPython
